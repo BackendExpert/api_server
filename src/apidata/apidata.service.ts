@@ -16,6 +16,7 @@ export class APIDataService {
         return {
             success: true,
             message: "All Cities Fetched Success",
+            count: getcities.length,
             result: getcities
         }
     }

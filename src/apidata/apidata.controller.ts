@@ -7,7 +7,7 @@ export class APIDataController{
         private readonly apidataService: APIDataService
     ) {}
 
-    @Get('cities')
+    @Get('/cities')
     FetchCities (
 
     ) {
