@@ -7,6 +7,7 @@ import { DatabaseModule } from './database/database.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthModule } from './auth/auth.module';
 import { SqliteModule } from './database/sqlite.module';
+import { APIDataModule } from './apidata/apidata.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SqliteModule } from './database/sqlite.module';
     DatabaseModule,
     SqliteModule,
     AuthModule,
+    APIDataModule,
   ],
   controllers: [AppController],
   providers: [AppService],
