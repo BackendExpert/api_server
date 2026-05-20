@@ -7,6 +7,8 @@ import { User, UserDocument } from "src/user/schema/user.schema";
 import { ApiKey, ApiKeyDocument } from "./schema/apikey.schema";
 import { AuditLog, AuditLogDocument } from "src/auditlogs/schema/auditlog.schema";
 import { CreateAPIKeyDto } from "./dto/create-apikey.dto";
+import { CreateAPIKey } from "src/common/utils/create-apikey.util";
+import { createAuditLog } from "src/common/utils/auditlogs.util";
 
 @Injectable()
 export class ApeKeyService {
@@ -25,6 +27,7 @@ export class ApeKeyService {
     ) { }
 
     async CreateAPIKey(
+        token: string,
         dto: CreateAPIKeyDto
     ) {
         const checkuser = await this.apikeyModel.findOne({ email: dto.email })
@@ -40,7 +43,26 @@ export class ApeKeyService {
             );
         }
 
-        
+        const apikey = await CreateAPIKey()
+
+        const apiKeyUser = await this.apikeyModel.create({
+            email: dto.email,
+            apikey: dto.apikey,
+            reqeuests: dto.reqeuests
+        })
+
+        await createAuditLog(this.auditlogModel, {
+            user: user._id,
+            action: "REGISTER_MAGIC_LINK_SENT",
+            description: `Registration magic link sent to ${user.email}`,
+            ipAddress,
+            userAgent,
+            metadata: {
+                ipAddress,
+                userAgent,
+                location,
+            },
+        });
     }
 
 }
