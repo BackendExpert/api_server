@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
@@ -9,6 +9,7 @@ import { AuditLog, AuditLogDocument } from "src/auditlogs/schema/auditlog.schema
 import { CreateAPIKeyDto } from "./dto/create-apikey.dto";
 import { CreateAPIKey } from "src/common/utils/create-apikey.util";
 import { createAuditLog } from "src/common/utils/auditlogs.util";
+import bcrypt from 'bcrypt'
 
 @Injectable()
 export class ApeKeyService {
@@ -28,8 +29,17 @@ export class ApeKeyService {
 
     async CreateAPIKey(
         token: string,
-        dto: CreateAPIKeyDto
+        dto: CreateAPIKeyDto,
+        ipAddress?: string,
+        userAgent?: string
     ) {
+        const payload = await this.jwtService.verify(token)
+        const user = await this.userModel.findOne({ email: payload.user })
+
+        if (!user) {
+            throw new NotFoundException("The User Not Found")
+        }
+
         const checkuser = await this.apikeyModel.findOne({ email: dto.email })
 
         if (checkuser) {
@@ -43,11 +53,12 @@ export class ApeKeyService {
             );
         }
 
-        const apikey = await CreateAPIKey()
+        const apikey = CreateAPIKey()
+        const hashapikey = await bcrypt.hash(apikey, 10)
 
         const apiKeyUser = await this.apikeyModel.create({
             email: dto.email,
-            apikey: dto.apikey,
+            apikey: hashapikey,
             reqeuests: dto.reqeuests
         })
 
@@ -63,6 +74,13 @@ export class ApeKeyService {
                 location,
             },
         });
+
+        await this.emailService.APIKeyCreatedEmail(
+            dto.email,
+            apikey,
+            dto.reqeuests
+        );
+
     }
 
 }
