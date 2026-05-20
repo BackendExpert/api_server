@@ -1,16 +1,38 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Param } from "@nestjs/common";
 import { APIDataService } from "./apidata.service";
 
 @Controller('api')
-export class APIDataController{
-    constructor (
+export class APIDataController {
+    constructor(
         private readonly apidataService: APIDataService
-    ) {}
+    ) { }
 
     @Get('/cities')
-    FetchCities (
+    FetchCities(
 
     ) {
         return this.apidataService.GetAllCities()
     }
+
+    @Get('/cities/:id')
+    FetchCity(
+        @Param('id') id: string
+    ) {
+        return this.apidataService.GetCityByID(id)
+    }
+
+    @Get('/cities/name/:name')
+    FetchCityByName(
+        @Param('name') name: string
+    ) {
+        return this.apidataService.GetCityByName(name);
+    }
+
+    @Get('/cities/code/:code')
+    FetchCityCode (
+        @Param('code') code: string        
+    ) {
+        return this.apidataService.GetCitybyCode(code)
+    }
+
 }
