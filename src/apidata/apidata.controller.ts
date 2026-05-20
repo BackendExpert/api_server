@@ -1,5 +1,6 @@
 import { Controller, Get, Param } from "@nestjs/common";
 import { APIDataService } from "./apidata.service";
+import { APIRateLimiter } from "src/common/decorators/apiratelimiter.decorator";
 
 @Controller('api')
 export class APIDataController {
@@ -8,6 +9,7 @@ export class APIDataController {
     ) { }
 
     @Get('/cities')
+    @APIRateLimiter()
     FetchCities(
 
     ) {
