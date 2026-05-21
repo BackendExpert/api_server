@@ -102,16 +102,16 @@ export class APIDataService {
         const offset = (page - 1) * limit;
 
         let sql = `
-        SELECT places.*
-        FROM places
-        INNER JOIN cities
-        ON places.city_id = cities.id
-        WHERE 1 = 1
-    `;
+            SELECT places.*
+            FROM places
+            INNER JOIN cities
+            ON places.city_id = cities.id
+            WHERE 1 = 1
+        `;
 
         const params: any[] = [];
 
-        // CMB
+
         if (query.cityCode) {
             sql += ` AND cities.city_code = ?`;
             params.push(query.cityCode);
