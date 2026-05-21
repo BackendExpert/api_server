@@ -8,8 +8,9 @@ export class APIDataController {
         private readonly apidataService: APIDataService
     ) { }
 
+    // Public access routs
+
     @Get('/cities')
-    @APIRateLimiter()
     FetchCities(
 
     ) {
@@ -36,5 +37,15 @@ export class APIDataController {
     ) {
         return this.apidataService.GetCitybyCode(code)
     }
+
+
+// --------------------------------------------------------------------------------------
+// --------------------Require API KEY TO ACCESS-----------------------------------------
+// --------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------
+
+
+    
+
 
 }

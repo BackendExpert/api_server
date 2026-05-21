@@ -6,6 +6,7 @@ import { APIDataService } from "./apidata.service";
 import { APIRateLimiterGuard } from "src/common/guard/apiratelimiter.guard";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ApiKey, ApiKeySchema } from "src/auth/schema/apikey.schema";
+import { EmailService } from "src/common/utils/email.util";
 
 @Module({
     imports: [
@@ -16,7 +17,7 @@ import { ApiKey, ApiKeySchema } from "src/auth/schema/apikey.schema";
         ])
     ],
     controllers: [APIDataController],
-    providers: [APIDataService, APIRateLimiterGuard]
+    providers: [APIDataService, APIRateLimiterGuard, EmailService]
 })
 
 export class APIDataModule { }

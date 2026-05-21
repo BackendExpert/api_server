@@ -81,4 +81,14 @@ export class APIDataService {
             result: checkcity
         }
     }
+
+    async GetPlaces(query: {
+        cityCode?: string;
+        type?: string;
+        page?: number;
+        limit?: number;
+    }) {
+        
+
+    }
 }
