@@ -12,21 +12,21 @@ export class ApiKeyController {
     ) { }
 
     @Post('create-key')
-    @UseGuards(JwtAuthGuard, PermissionsGuard)
-    @Permissions('apikey:create')
+    // @UseGuards(JwtAuthGuard, PermissionsGuard)
+    // @Permissions('apikey:create')
 
     CreateAPIKey(
         @Body() dto: CreateAPIKeyDto,
         @Headers("authorization") authHeader: string,
     ) {
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-            throw new UnauthorizedException("Invalid or missing token");
-        }
+        // if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        //     throw new UnauthorizedException("Invalid or missing token");
+        // }
 
-        const token = authHeader.split(" ")[1];
+        // const token = authHeader.split(" ")[1];
         
         return this.apikeyService.CreateAPIKey(
-            token,
+            // token,
             dto
         )
     }

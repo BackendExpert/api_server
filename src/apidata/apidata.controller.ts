@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from "@nestjs/common";
+import { Controller, Get, Param, Query } from "@nestjs/common";
 import { APIDataService } from "./apidata.service";
 import { APIRateLimiter } from "src/common/decorators/apiratelimiter.decorator";
 
@@ -11,8 +11,9 @@ export class APIDataController {
     // Public access routs
 
     @Get('/cities')
+    
     FetchCities(
-
+        
     ) {
         return this.apidataService.GetAllCities()
     }
@@ -44,8 +45,12 @@ export class APIDataController {
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
 
+    @Get('/places')
+    @APIRateLimiter()
 
-    
-
-
+    fetchPlaces (
+        @Query() query: any
+    ) {
+        return this.apidataService.GetPlaces(query)
+    }  
 }

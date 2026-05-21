@@ -28,17 +28,17 @@ export class ApeKeyService {
     ) { }
 
     async CreateAPIKey(
-        token: string,
+        // token: string,
         dto: CreateAPIKeyDto,
         ipAddress?: string,
         userAgent?: string
     ) {
-        const payload = await this.jwtService.verify(token)
-        const user = await this.userModel.findOne({ email: payload.user })
+        // const payload = await this.jwtService.verify(token)
+        // const user = await this.userModel.findOne({ email: payload.user })
 
-        if (!user) {
-            throw new NotFoundException("The User Not Found")
-        }
+        // if (!user) {
+        //     throw new NotFoundException("The User Not Found")
+        // }
 
         const checkuser = await this.apikeyModel.findOne({ email: dto.email })
 
@@ -59,27 +59,33 @@ export class ApeKeyService {
         const apiKeyUser = await this.apikeyModel.create({
             email: dto.email,
             apikey: hashapikey,
-            reqeuests: dto.reqeuests
+            reqeuests: dto.reqeuests,
+            issued_at: Date.now(),
         })
 
-        await createAuditLog(this.auditlogModel, {
-            user: user._id,
-            action: "REGISTER_MAGIC_LINK_SENT",
-            description: `Registration magic link sent to ${user.email}`,
-            ipAddress,
-            userAgent,
-            metadata: {
-                ipAddress,
-                userAgent,
-                location,
-            },
-        });
+        // await createAuditLog(this.auditlogModel, {
+        //     user: user._id,
+        //     action: "REGISTER_MAGIC_LINK_SENT",
+        //     description: `Registration magic link sent to ${user.email}`,
+        //     ipAddress,
+        //     userAgent,
+        //     metadata: {
+        //         ipAddress,
+        //         userAgent,
+        //         location,
+        //     },
+        // });
 
         await this.emailService.APIKeyCreatedEmail(
             dto.email,
             apikey,
             dto.reqeuests
         );
+
+        return {
+            success: true,
+            message: "Api Key Created Successful"
+        }
     }
 
 }
